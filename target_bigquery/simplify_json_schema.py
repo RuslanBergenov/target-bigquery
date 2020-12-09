@@ -1,3 +1,8 @@
+"""
+Source:
+https://github.com/datamill-co/target-postgres/blob/master/target_postgres/json_schema.py
+"""
+
 from copy import deepcopy
 import decimal
 import json
@@ -15,6 +20,7 @@ NUMBER = 'number'
 BOOLEAN = 'boolean'
 STRING = 'string'
 DATE_TIME_FORMAT = 'date-time'
+DATE_FORMAT = 'date'
 
 _PYTHON_TYPE_TO_JSON_SCHEMA = {
     int: INTEGER,
@@ -75,6 +81,11 @@ def simple_type(schema):
     if is_datetime(schema):
         return {'type': t,
                 'format': DATE_TIME_FORMAT}
+
+
+    if is_date(schema):
+        return {'type': t,
+                'format': DATE_FORMAT}
 
     return {'type': t}
 
@@ -195,6 +206,15 @@ def is_datetime(schema):
 
     return STRING in get_type(schema) and schema.get('format') == DATE_TIME_FORMAT
 
+
+def is_date(schema):
+    """
+    Given a JSON Schema compatible dict, returns True when schema's type allows being a date-time
+    :param schema: dict, JSON Schema
+    :return: Boolean
+    """
+
+    return STRING in get_type(schema) and schema.get('format') == DATE_FORMAT
 
 def make_nullable(schema):
     """
@@ -332,6 +352,14 @@ def _simplify__implicit_anyof(root_schema, schema):
         schemas.append(Cachable({
             'type': [STRING],
             'format': DATE_TIME_FORMAT
+        }))
+
+        types.remove(STRING)
+
+    if is_date(schema):
+        schemas.append(Cachable({
+            'type': [STRING],
+            'format': DATE_FORMAT
         }))
 
         types.remove(STRING)
