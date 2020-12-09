@@ -39,6 +39,9 @@ def get_type(property):
 
 
 def __filter(schema, record):
+    #TODO: remove comment or remove function
+    """it's not being used anymore?"""
+
     if not record:
         return record
 
@@ -120,8 +123,11 @@ def cleanup_record(schema, record):
 
     return nr
 
-
 def merge_anyof(props):
+
+    # #TODO: Remove comment or remove function
+    # I won't need it anymore if i use simplified schema?
+
     fs = set()
     sfs = []
 
@@ -137,9 +143,11 @@ def merge_anyof(props):
     return sfs
 
 
+
 def define_schema(field, name, required_fields=None):
-    if "KeyValueOfstringbase" in field.get('properties', {}) or "KeyValueOfstringbase" in field:
-        return None
+    # TODO: remove comments and/or add docustring
+    if "KeyValueOfstringbase" in field.get('properties', {}) or "KeyValueOfstringbase" in field: # this is what Ben added. This field caused us issues. Comment out for now. When it's commented out, the code is going to break
+        return None # pay attention to this field in Bing Ads. Is it being pulled correctly?
 
     field_type, _ = get_type(field)
 

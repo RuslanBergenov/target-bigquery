@@ -108,3 +108,8 @@ ENV/
 .vscode/
 
 sandbox/
+
+# dev files
+tests/dev_tests
+
+archived_and_temp_backups
