@@ -7,6 +7,8 @@ import collections
 
 from tests.input_json_schemas import *
 
+from tests.input_json_schemas_Bing_Ads_problem_column import problem_schema
+
 from tests.utils import convert_list_of_schema_fielts_to_list_of_lists
 
 
@@ -52,10 +54,12 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
         msg = singer.parse_message(schema)
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_test = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert".
+        # Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema = simplify(msg.schema)
         schema = build_schema(schema, key_properties=msg.key_properties, add_metadata=True)
 
@@ -87,10 +91,12 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
         msg = singer.parse_message(schema)
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_test = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert".
+        # Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema = simplify(msg.schema)
         schema = build_schema(schema, key_properties=msg.key_properties, add_metadata=True)
 
@@ -133,16 +139,20 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
     def test_nested_schema_simplify_then_build_v1_fails(self):
 
-        # msg = singer.parse_message(schema_nested_1) # fails (2nd method doesn't build schema, because in simplified JSON schema anyOf data type appears in column Age)
+        # msg = singer.parse_message(schema_nested_1)
+        # fails (2nd method doesn't build schema, because in simplified JSON schema anyOf data type appears in column Age)
+
         msg = singer.parse_message(schema_nested_1_subset_1_contains_age) # fails (same reason as above)
         # msg = singer.parse_message(schema_nested_1_subset_2_no_age) # succeeds (I removed age column)
 
         schema_input = msg.schema
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_built_method_1 = build_schema(schema_input, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert".
+        # Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema_simplified = simplify(schema_input)
         schema = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
 
@@ -157,16 +167,20 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
     def test_nested_schema_simplify_then_build_v1_succeeds(self):
 
-        # msg = singer.parse_message(schema_nested_1) # fails (2nd method doesn't build schema, because in simplified JSON schema anyOf data type appears in column Age)
+        # msg = singer.parse_message(schema_nested_1)
+        # fails (2nd method doesn't build schema, because in simplified JSON schema anyOf data type appears in column Age)
+
         # msg = singer.parse_message(schema_nested_1_subset_1_contains_age) # fails (same reason as above)
         msg = singer.parse_message(schema_nested_1_subset_2_no_age) # succeeds (I removed age column)
 
         schema_input = msg.schema
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_built_method_1 = build_schema(schema_input, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert". S
+        # implification was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema_simplified = simplify(schema_input)
         schema = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
 
@@ -198,10 +212,12 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
         schema_input = msg.schema
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_built_method_1 = build_schema(schema_input, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert".
+        # Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema_simplified = simplify(schema_input)
         schema_built_method_2 = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
 
@@ -227,10 +243,12 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
         schema_input = msg.schema
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_built_method_1 = build_schema(schema_input, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert".
+        # was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema_simplified = simplify(schema_input)
         schema_built_method_2 = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
 
@@ -247,16 +265,41 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
     def test_nested_schema_simplify_then_build_bing_ads(self):
 
-        msg = singer.parse_message(bing_ads_accounts) # E           simplejson.scanner.JSONDecodeError: Expecting value: line 1 column 96 (char 95)
+        #TODO: fix error here
+        # hypothesis: the error might be caused by a bug in Bing Ads tap
+        # the input JSON schema for KeyValueOfstringbase is not correct, it doesn't match API documentation
 
-        # msg = singer.parse_message(bing_ads_campaigns) # E           simplejson.scanner.JSONDecodeError: Expecting value: line 1 column 96 (char 95)
+        # msg = singer.parse_message(bing_ads_accounts)
+        # fails because of KeyValueOfstringbase column. Both methods fail on it
+
+        msg = singer.parse_message(problem_schema)
+
+        # breaks at simplification stage
+
+        # schema = 'KeyValueOfstringbase'
+        #             def get_type(schema):
+        #         """
+        #         Given a JSON Schema dict, extracts the simplified `type` value
+        #         :param schema: dict, JSON Schema
+        #         :return: [string ...]
+        #         """
+        # >       t = schema.get('type', None)
+        # E       AttributeError: 'str' object has no attribute 'get'
+
+        # msg = singer.parse_message(bing_ads_campaigns) #success
+
+        # msg = singer.parse_message(bing_ads_ad_extension_detail_report)  #success
+
+        # msg = singer.parse_message(bing_ads_search_query_performance_report) #success
 
         schema_input = msg.schema
 
-        # schema conversion method 1: "Convert". Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
+        # schema conversion method 1: "Convert".
+        # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
         schema_built_method_1 = build_schema(schema_input, key_properties=msg.key_properties, add_metadata=True)
 
-        # schema conversion method 2: "Simplify and convert". Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
+        # schema conversion method 2: "Simplify and convert".
+        # Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
         schema_simplified = simplify(schema_input)
         schema_built_method_2 = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
 

@@ -195,6 +195,8 @@ def define_schema(field, name, required_fields=None):
         # objects in arrays cannot be nullable
         # - but nested fields in RECORDS can be nullable
         props = field.get("items")
+
+        # workaround for KeyValueOfstringbase
         if "KeyValueOfstringbase" in props:
             return None
 

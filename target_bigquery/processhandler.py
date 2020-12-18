@@ -185,7 +185,8 @@ class LoadJobProcessHandler(BaseProcessHandler):
         partition_field = table_config.get("partition_field", None)
         cluster_fields = table_config.get("cluster_fields", None)
         force_fields = table_config.get("force_fields", {})
-
+        #TODO: add 2nd method of processing schema here. Use try... except... in case method 2 fails.
+        # alternatively, fix method 2, so it doesn't fail with anyOf ("Age" column in Bing Ads)
         schema = build_schema(table_schema, key_properties=key_props, add_metadata=metadata_columns, force_fields=force_fields)
         load_config = LoadJobConfig()
         load_config.ignore_unknown_values = True
