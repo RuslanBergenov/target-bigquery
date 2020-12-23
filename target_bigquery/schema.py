@@ -62,7 +62,8 @@ def __filter(schema, record):
             # anyOf can be an array of properties, the choice here
             # is to ignore the case where anyOf is two types (not including "null")
             # and simply choose the first one. This might bite us.
-            # adswerve recommendation: implement prioritization of string, then float, then int
+            # adswerve recommendation: implement prioritization of string, then float, then int, then boolean
+            # what do we do about date and datetime?
             # logging.error(f"anyof prop: {prop}, anyof record: record")
             return filter(prop, record)
 
@@ -122,6 +123,7 @@ def cleanup_record(schema, record):
             nr[nkey] = value
 
     return nr
+
 
 def merge_anyof(props):
 
@@ -252,6 +254,21 @@ def bigquery_transformed_key(key):
     return key
 
 
+
+def clean_up_schema_anyOf(schema):
+
+    schema_cleaned = {'type': schema['type'], 'properties': {}}
+
+    for key, props in schema.get("properties", schema.get("items", {}).get("properties")).items():
+
+        if ('anyOf' in props) and ('properties' not in props) and ('type' not in props):
+            props = props['anyOf'][-1]
+
+        schema_cleaned['properties'].update({key: props})
+
+    return schema_cleaned
+
+
 def build_schema(schema, key_properties=None, add_metadata=True, force_fields={}):
     SCHEMA = []
 
@@ -260,8 +277,8 @@ def build_schema(schema, key_properties=None, add_metadata=True, force_fields={}
         required_fields.update(schema["required"])
 
     for key, props in schema.get("properties",
-                                 schema.get("items", {}).get("properties")
-                                 ).items():  # schema["properties"].items():
+                             schema.get("items", {}).get("properties")
+                             ).items():  # schema["properties"].items():
 
         if key in force_fields:
             SCHEMA.append(

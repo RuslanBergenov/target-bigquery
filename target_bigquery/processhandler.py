@@ -12,9 +12,9 @@ from google.cloud.bigquery.job import SourceFormat
 from jsonschema import validate
 
 from target_bigquery.encoders import DecimalEncoder
-from target_bigquery.schema import build_schema, cleanup_record
+from target_bigquery.schema import build_schema, cleanup_record, clean_up_schema_anyOf
 from target_bigquery.state import State
-
+from target_bigquery.simplify_json_schema import simplify
 
 class BaseProcessHandler(object):
 
@@ -185,9 +185,35 @@ class LoadJobProcessHandler(BaseProcessHandler):
         partition_field = table_config.get("partition_field", None)
         cluster_fields = table_config.get("cluster_fields", None)
         force_fields = table_config.get("force_fields", {})
-        #TODO: add 2nd method of processing schema here. Use try... except... in case method 2 fails.
-        # alternatively, fix method 2, so it doesn't fail with anyOf ("Age" column in Bing Ads)
-        schema = build_schema(table_schema, key_properties=key_props, add_metadata=metadata_columns, force_fields=force_fields)
+
+        # TODO:
+
+        # a new way of schema conversion has been created
+        # We'll refer to it as method 2 "simplify and convert"
+
+        # method 2 "simplify and convert" fails on "Age" column of Bing Ads
+            # simplification stage introduces anyOf, and then conversion stage fails
+
+        # error handing is used to work around this issue
+        # alternative: fix method 2, so it doesn't fail with anyOf ("Age" column in Bing Ads)
+
+        # A) Change build schema, so it handles anyOf
+        # B) Change simplify, so it doesn't introduce anyOf
+        # Anže recommends option A
+
+        try:
+            # new method 2 "simplify and convert"
+            schema_simplified = simplify(table_schema)
+            schema_cleaned = clean_up_schema_anyOf(schema_simplified)
+            schema = build_schema(schema_cleaned, key_properties=key_props, add_metadata=metadata_columns,
+                                  force_fields=force_fields)
+
+        except Exception as err:
+            logger.error(str(err))
+            # old method 1 "convert"
+            schema = build_schema(table_schema, key_properties=key_props, add_metadata=metadata_columns,
+                                  force_fields=force_fields)
+
         load_config = LoadJobConfig()
         load_config.ignore_unknown_values = True
         load_config.schema = schema
@@ -233,7 +259,6 @@ class LoadJobProcessHandler(BaseProcessHandler):
                 err.message = f"reason: {reason}, errors: {';'.join(messages)}"
 
             raise err
-
 
 class PartialLoadJobProcessHandler(LoadJobProcessHandler):
 
