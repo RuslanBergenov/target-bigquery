@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Dec 23 16:20:49 2020
+the purpose of this script is to convert JSON schema to BigQuery schema.
+"""
 
-@author: Ruslan Bergenov
-"""
-import singer
 from google.cloud.bigquery import SchemaField
+import re
 
 METADATA_FIELDS = {
     "_time_extracted": {"type": ["null", "string"], "format": "date-time", "bq_type": "timestamp"},
@@ -13,11 +11,23 @@ METADATA_FIELDS = {
 }
 
 
+
+def bigquery_transformed_key(key):
+
+    for pattern, repl in [(r"-", "_"), (r"\.", "_")]:
+        key = re.sub(pattern, repl, key)
+
+    if re.match(r"^\d", key):
+        key = "_" + key
+
+    return key
+
+
 def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
     """
-    In simplified JSON schema, anyOf columns are gone.
+    In a simplified JSON schema, anyOf columns are gone.
 
-    There's one instance when input JSON schema has no anyOf, but anyOf gets added:
+    There's one instance when original JSON schema has no anyOf, but anyOf gets added:
 
     original JSON schema:
 
@@ -77,8 +87,7 @@ def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
 
         anyOf_data_types.update({data_type: prioritization_dict[data_type]})
 
-    # return key with minimum value
-    # return the highest priority data type
+    # return key with minimum value, which is the highest priority data type
     # https://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary
     return min(anyOf_data_types, key=anyOf_data_types.get)
 
@@ -106,6 +115,10 @@ def convert_field_type(field_property):
 
         field_type_BigQuery = conversion_dict[field_property["format"]]
 
+    elif (("items" in field_property) and ("properties" not in field_property["items"])):
+
+        field_type_BigQuery = conversion_dict[field_property['items']['type'][0]]
+
     else:
 
         field_type_BigQuery = conversion_dict[field_property["type"][0]]
@@ -114,7 +127,6 @@ def convert_field_type(field_property):
 
 
 def determine_field_mode(field_name, field_property):
-
     if field_name in required_fields:
 
         field_mode = 'REQUIRED'
@@ -130,6 +142,38 @@ def determine_field_mode(field_name, field_property):
     return field_mode
 
 
+def build_field(field_name, field_property):
+
+    if ("items" not in field_property) and ("properties" not in field_property) or (
+            "items" in field_property and "properties" not in field_property["items"]):
+        return (SchemaField(name=bigquery_transformed_key(field_name),
+                            field_type=convert_field_type(field_property),
+                            mode=determine_field_mode(field_name, field_property),
+                            description=None,
+                            fields=(),
+                            policy_tags=None)
+                )
+
+    if ("items" in field_property and "properties" in field_property["items"]) or ("properties" in field_property):
+
+        processed_subfields = []
+
+        # https://www.w3schools.com/python/ref_dictionary_get.asp
+        for subfield_name, subfield_property in field_property.get("properties",
+                                                                   field_property.get("items",{}).get("properties")
+                                                                   ).items():
+
+            processed_subfields.append(build_field(subfield_name, subfield_property))
+
+        return (SchemaField(name=bigquery_transformed_key(field_name),
+                            field_type=convert_field_type(field_property),
+                            mode=determine_field_mode(field_name, field_property),
+                            description=None,
+                            fields=processed_subfields,
+                            policy_tags=None)
+                )
+
+
 def dev_build_schema(schema, key_properties=None, add_metadata=True, force_fields={}):
 
     global required_fields
@@ -141,13 +185,7 @@ def dev_build_schema(schema, key_properties=None, add_metadata=True, force_field
     for field_name, field_property in schema.get("properties", schema.get("items", {}).get(
             "properties")).items():
 
-        schema_BigQuery.append(SchemaField(name=field_name,
-                                           field_type=convert_field_type(field_property),
-                                           mode=determine_field_mode(field_name, field_property),
-                                           description=None,
-                                           fields=(),
-                                           policy_tags=None)
-                               )
+        schema_BigQuery.append(build_field(field_name, field_property))
 
     if add_metadata:
 
@@ -161,7 +199,5 @@ def dev_build_schema(schema, key_properties=None, add_metadata=True, force_field
                                    )
 
     return schema_BigQuery
-
-
 
 

@@ -12,10 +12,6 @@ from tests.input_json_schemas import *
 
 from tests.utils import convert_list_of_schema_fielts_to_list_of_lists
 
-from tests.input_json_schemas_Bing_Ads_problem_column import problem_schema
-
-from tests.input_json_schemas_age_anyOf_problem import test_schema_collection_anyOf_problem_column, test_schema_collection_anyOf_problem_column_short_version, test_schema_collection_anyOf_problem_column_removed
-
 
 class TestStream(unittestcore.BaseUnitTest):
 
@@ -135,6 +131,84 @@ class TestStream(unittestcore.BaseUnitTest):
         converted_data_type = convert_field_type(test_input)
 
         assert converted_data_type == "INTEGER"
+
+
+    def test_nested_schema_1(self):
+
+        schema_0_input = schema_nested_1
+
+        msg = singer.parse_message(schema_0_input)
+
+        schema_1_simplified = simplify(msg.schema)
+
+        schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+                                                     add_metadata=True)
+
+        schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+
+        # are results of the two methods above identical?
+        assert collections.Counter(schema_2_built_new_method) == collections.Counter(schema_3_built_old_method)
+
+        for f in schema_2_built_new_method:
+            if f.name in ("date_start", "date_stop"):
+                self.assertEqual(f.field_type.upper(), "TIMESTAMP")
+
+    def test_nested_schema_2(self):
+
+        schema_0_input = schema_nested_2
+
+        msg = singer.parse_message(schema_0_input)
+
+        schema_1_simplified = simplify(msg.schema)
+
+        schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+                                                     add_metadata=True)
+
+        schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+
+        # are results of the two methods above identical? ignore order of columns and case
+        schema_built_new_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_2_built_new_method)
+
+        schema_built_old_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_3_built_old_method)
+
+        assert schema_built_new_method_sorted == schema_built_old_method_sorted
+
+    def test_several_nested_schemas(self):
+
+        list_of_schema_inputs = [schema_nested_2,
+                                 schema_nested_3_shopify,
+                                 bing_ads_campaigns,
+                                 bing_ads_ad_extension_detail_report,
+                                 bing_ads_ad_group_performance_report,
+                                 bing_ads_ad_performance_report,
+                                 bing_ads_age_gender_audience_report,
+                                 bing_ads_audience_performance_report,
+                                 bing_ads_campaign_performance_report,
+                                 bing_ads_geographic_performance_report,
+                                 bing_ads_goals_and_funnels_report,
+                                 bing_ads_keyword_performance_report,
+                                 bing_ads_search_query_performance_report
+                                 ]
+
+        for next_schema_input in list_of_schema_inputs:
+
+            schema_0_input = next_schema_input
+
+            msg = singer.parse_message(schema_0_input)
+
+            schema_1_simplified = simplify(msg.schema)
+
+            schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+                                                         add_metadata=True)
+
+            schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+
+            # are results of the two methods above identical? ignore order of columns and case
+            schema_built_new_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_2_built_new_method)
+
+            schema_built_old_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_3_built_old_method)
+
+            assert schema_built_new_method_sorted == schema_built_old_method_sorted
 
 
 

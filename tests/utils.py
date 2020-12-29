@@ -2,6 +2,8 @@ def convert_schema_field_to_list(input_schema_field):
     """
     Helper function for unit testing.
 
+    Help to compare two BigQuery schemas. Ignore order of columns and case.
+
     Recursive function which converts 1 nested BigQuery SchemaField (one column) to a sorted nested list,
     so it's easier to compare 2 BigQuery schemas, when they have a different sort order
 
@@ -12,6 +14,7 @@ def convert_schema_field_to_list(input_schema_field):
         Goes through one SchemaField and its nested SchemaFields.
         Converts nested SchemaField to nested lists.
         Sorts the list and sublists.
+        Uppercase field type and mode.
 
     Parameters
     ----------
@@ -50,7 +53,7 @@ def convert_schema_field_to_list(input_schema_field):
 
     if len(input_schema_field.fields) == 0:
 
-        return list((input_schema_field.name, input_schema_field.field_type, input_schema_field.mode,
+        return list((input_schema_field.name, input_schema_field.field_type.upper(), input_schema_field.mode.upper(),
                      input_schema_field.description, input_schema_field.fields, input_schema_field.policy_tags))
 
     elif len(input_schema_field.fields) > 0:
@@ -60,7 +63,7 @@ def convert_schema_field_to_list(input_schema_field):
         for field in input_schema_field.fields:
             processed_subfields.append(convert_schema_field_to_list(field))
 
-        return list((input_schema_field.name, input_schema_field.field_type, input_schema_field.mode,
+        return list((input_schema_field.name, input_schema_field.field_type.upper(), input_schema_field.mode.upper(),
                      input_schema_field.description, sorted(processed_subfields),
                      input_schema_field.policy_tags))
 

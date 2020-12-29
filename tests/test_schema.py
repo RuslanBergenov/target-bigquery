@@ -9,8 +9,6 @@ from tests.input_json_schemas import *
 
 from tests.utils import convert_list_of_schema_fielts_to_list_of_lists
 
-from tests.input_json_schemas_Bing_Ads_problem_column import problem_schema
-
 from tests.input_json_schemas_age_anyOf_problem import test_schema_collection_anyOf_problem_column, test_schema_collection_anyOf_problem_column_short_version, test_schema_collection_anyOf_problem_column_removed
 
 
@@ -138,7 +136,11 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
 
     def test_nested_schema_simplify_then_build_v1(self):
 
-        msg = singer.parse_message(schema_nested_1_subset_1_contains_age)
+        # msg = singer.parse_message(schema_nested_1_subset_1_contains_age)
+
+        msg = singer.parse_message(schema_nested_1)
+
+        # msg = singer.parse_message(schema_nested_1_subset_items_problem)
 
         schema_input = msg.schema
 
@@ -232,7 +234,7 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
         schema_simplified = simplify(schema_input)
         schema = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
 
-        # are results of the two methods above identical? ignore order of columns
+        # are results of the two methods above identical?
         assert collections.Counter(schema_built_method_1) == collections.Counter(schema)
 
         for f in schema:
@@ -307,55 +309,3 @@ class TestSimpleStream(unittestcore.BaseUnitTest):
         schema_built_method_2_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_built_method_2)
 
         assert schema_built_method_1_sorted == schema_built_method_2_sorted
-
-
-
-
-    # def test_nested_schema_simplify_then_build_bing_ads(self):
-    #
-    #     #TODO: fix error here - completed
-    #     # we had this: hypothesis: the error might be caused by a bug in Bing Ads tap
-    #     # we confirmed that the input JSON schema for KeyValueOfstringbase is not correct, it doesn't match API documentation
-    #     # this was fixed by using newer version of tap bing ads
-    #
-    #     # msg = singer.parse_message(bing_ads_accounts)
-    #     # fails because of KeyValueOfstringbase column. Both methods fail on it
-    #
-    #     msg = singer.parse_message(problem_schema)
-    #
-    #     # breaks at simplification stage
-    #
-    #     # schema = 'KeyValueOfstringbase'
-    #     #             def get_type(schema):
-    #     #         """
-    #     #         Given a JSON Schema dict, extracts the simplified `type` value
-    #     #         :param schema: dict, JSON Schema
-    #     #         :return: [string ...]
-    #     #         """
-    #     # >       t = schema.get('type', None)
-    #     # E       AttributeError: 'str' object has no attribute 'get'
-    #
-    #     # msg = singer.parse_message(bing_ads_campaigns) #success
-    #
-    #     # msg = singer.parse_message(bing_ads_ad_extension_detail_report)  #success
-    #
-    #     # msg = singer.parse_message(bing_ads_search_query_performance_report) #success
-    #
-    #     schema_input = msg.schema
-    #
-    #     # schema conversion method 1: "Convert".
-    #     # Method is taken from Adswerve fork of GitHub repo target-bigquery, dev-schema-fix branch
-    #     schema_built_method_1 = build_schema(schema_input, key_properties=msg.key_properties, add_metadata=True)
-    #
-    #     # schema conversion method 2: "Simplify and convert".
-    #     # Simplification was taken from target-postgres repo. Conversion is the same as in method 1 above
-    #     schema_simplified = simplify(schema_input)
-    #     schema_built_method_2 = build_schema(schema_simplified, key_properties=msg.key_properties, add_metadata=True)
-    #
-    #     # are results of the two methods above identical? ignore order of column
-    #
-    #     schema_built_method_1_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_built_method_1)
-    #
-    #     schema_built_method_2_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_built_method_2)
-    #
-    #     assert schema_built_method_1_sorted == schema_built_method_2_sorted
