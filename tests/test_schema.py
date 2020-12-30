@@ -190,7 +190,10 @@ class TestStream(unittestcore.BaseUnitTest):
                                  bing_ads_geographic_performance_report,
                                  bing_ads_goals_and_funnels_report,
                                  bing_ads_keyword_performance_report,
-                                 bing_ads_search_query_performance_report
+                                 bing_ads_search_query_performance_report,
+                                 recharge_addresses,
+                                 recharge_charges,
+                                 recharge_orders
                                  ]
 
         for next_schema_input in list_of_schema_inputs:
