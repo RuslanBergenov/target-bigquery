@@ -14,6 +14,11 @@ METADATA_FIELDS = {
 
 def bigquery_transformed_key(key):
 
+    """
+    :param key: JSON field name
+    :return: cleaned up JSON field name
+    """
+
     for pattern, repl in [(r"-", "_"), (r"\.", "_")]:
         key = re.sub(pattern, repl, key)
 
@@ -24,7 +29,11 @@ def bigquery_transformed_key(key):
 
 
 def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
+
     """
+    :param field_property: JSON field property, which has anyOf and multiple data types
+    :return: one BigQuery SchemaField field_type, which is prioritized
+
     In a simplified JSON schema, anyOf columns are gone.
 
     There's one instance when original JSON schema has no anyOf, but anyOf gets added:
@@ -43,7 +52,7 @@ def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
      simplification stage:
 
 
-     {'simplification_stage_added_anyOf': {
+      {'simplification_stage_added_anyOf': {
             'anyOf': [
                 {
                     'type': [
@@ -94,6 +103,11 @@ def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
 
 def convert_field_type(field_property):
 
+    """
+    :param field_property: JSON field property
+    :return: BigQuery SchemaField field_type
+    """
+
     conversion_dict = {"string": "STRING",
                        "number": "FLOAT",
                        "integer": "INTEGER",
@@ -127,6 +141,13 @@ def convert_field_type(field_property):
 
 
 def determine_field_mode(field_name, field_property):
+
+    """
+    :param field_name: one nested JSON field name
+    :param field_property: one nested JSON field property
+    :return: BigQuery SchemaField mode
+    """
+
     if field_name in required_fields:
 
         field_mode = 'REQUIRED'
@@ -144,8 +165,14 @@ def determine_field_mode(field_name, field_property):
 
 def build_field(field_name, field_property):
 
-    if ("items" not in field_property) and ("properties" not in field_property) or (
-            "items" in field_property and "properties" not in field_property["items"]):
+    """
+    :param field_name: one nested JSON field name
+    :param field_property: one nested JSON field property
+    :return: one BigQuery nested SchemaField
+    """
+
+    if not ("items" in field_property and "properties" in field_property["items"]) and not ("properties" in field_property):
+
         return (SchemaField(name=bigquery_transformed_key(field_name),
                             field_type=convert_field_type(field_property),
                             mode=determine_field_mode(field_name, field_property),
@@ -154,13 +181,13 @@ def build_field(field_name, field_property):
                             policy_tags=None)
                 )
 
-    if ("items" in field_property and "properties" in field_property["items"]) or ("properties" in field_property):
+    elif ("items" in field_property and "properties" in field_property["items"]) or ("properties" in field_property):
 
         processed_subfields = []
 
         # https://www.w3schools.com/python/ref_dictionary_get.asp
         for subfield_name, subfield_property in field_property.get("properties",
-                                                                   field_property.get("items",{}).get("properties")
+                                                                   field_property.get("items", {}).get("properties")
                                                                    ).items():
 
             processed_subfields.append(build_field(subfield_name, subfield_property))
@@ -175,6 +202,15 @@ def build_field(field_name, field_property):
 
 
 def dev_build_schema(schema, key_properties=None, add_metadata=True, force_fields={}):
+
+    """
+
+    :param schema: input simplified JSON schema
+    :param key_properties: JSON schema fields which will become required BigQuery column
+    :param add_metadata: do we want BigQuery metadata columns (e.g., when data was uploaded?)
+    :param force_fields: TODO: add explanation
+    :return: a list of BigQuery SchemaFields, which represents one BigQuery table
+    """
 
     global required_fields
 

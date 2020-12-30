@@ -8,7 +8,7 @@ from target_bigquery.simplify_json_schema import simplify
 from tests import unittestcore
 import collections
 
-from tests.input_json_schemas import *
+from tests.rsc.input_json_schemas import *
 
 from tests.utils import convert_list_of_schema_fielts_to_list_of_lists
 
@@ -175,7 +175,10 @@ class TestStream(unittestcore.BaseUnitTest):
 
     def test_several_nested_schemas(self):
 
-        list_of_schema_inputs = [schema_nested_2,
+        list_of_schema_inputs = [test_schema_collection_anyOf_problem_column,
+                                 schema_nested_1,
+                                 schema_nested_1_subset_items_problem,
+                                 schema_nested_2,
                                  schema_nested_3_shopify,
                                  bing_ads_campaigns,
                                  bing_ads_ad_extension_detail_report,
