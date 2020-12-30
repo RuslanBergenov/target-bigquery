@@ -1,8 +1,8 @@
 import singer
 
-from target_bigquery.dev_schema import dev_build_schema, prioritize_one_data_type_from_multiple_ones_in_anyOf, convert_field_type
+from target_bigquery.schema import build_schema, prioritize_one_data_type_from_multiple_ones_in_anyOf, convert_field_type
 
-from target_bigquery.schema import build_schema
+from target_bigquery.schema_old import build_schema_old
 
 from target_bigquery.simplify_json_schema import simplify
 from tests import unittestcore
@@ -26,10 +26,10 @@ class TestStream(unittestcore.BaseUnitTest):
 
         schema_1_simplified = simplify(msg.schema)
 
-        schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+        schema_2_built_new_method = build_schema(schema_1_simplified, key_properties=msg.key_properties,
                                                      add_metadata=True)
 
-        schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+        schema_3_built_old_method = build_schema_old(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
         # are results of the two methods above identical? ignore order of columns
         assert collections.Counter(schema_2_built_new_method) == collections.Counter(schema_3_built_old_method)
@@ -141,10 +141,10 @@ class TestStream(unittestcore.BaseUnitTest):
 
         schema_1_simplified = simplify(msg.schema)
 
-        schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+        schema_2_built_new_method = build_schema(schema_1_simplified, key_properties=msg.key_properties,
                                                      add_metadata=True)
 
-        schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+        schema_3_built_old_method = build_schema_old(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
         # are results of the two methods above identical?
         assert collections.Counter(schema_2_built_new_method) == collections.Counter(schema_3_built_old_method)
@@ -161,10 +161,10 @@ class TestStream(unittestcore.BaseUnitTest):
 
         schema_1_simplified = simplify(msg.schema)
 
-        schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+        schema_2_built_new_method = build_schema(schema_1_simplified, key_properties=msg.key_properties,
                                                      add_metadata=True)
 
-        schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+        schema_3_built_old_method = build_schema_old(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
         # are results of the two methods above identical? ignore order of columns and case
         schema_built_new_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_2_built_new_method)
@@ -201,10 +201,10 @@ class TestStream(unittestcore.BaseUnitTest):
 
             schema_1_simplified = simplify(msg.schema)
 
-            schema_2_built_new_method = dev_build_schema(schema_1_simplified, key_properties=msg.key_properties,
+            schema_2_built_new_method = build_schema(schema_1_simplified, key_properties=msg.key_properties,
                                                          add_metadata=True)
 
-            schema_3_built_old_method = build_schema(msg.schema, key_properties=msg.key_properties, add_metadata=True)
+            schema_3_built_old_method = build_schema_old(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
             # are results of the two methods above identical? ignore order of columns and case
             schema_built_new_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_2_built_new_method)
