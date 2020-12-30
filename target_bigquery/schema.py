@@ -56,7 +56,7 @@ def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
     :param field_property: JSON field property, which has anyOf and multiple data types
     :return: one BigQuery SchemaField field_type, which is prioritized
 
-    In a simplified JSON schema, anyOf columns are gone.
+    Simplification step removes anyOf columns from original JSON schema.
 
     There's one instance when original JSON schema has no anyOf, but anyOf gets added:
 
@@ -72,7 +72,6 @@ def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
 
      This is a simplified JSON schema where anyOf got added during
      simplification stage:
-
 
       {'simplification_stage_added_anyOf': {
             'anyOf': [
@@ -92,7 +91,7 @@ def prioritize_one_data_type_from_multiple_ones_in_anyOf(field_property):
         }
         }
 
-     The VALUE of this dictionary will be the INPUT for this function.
+    The VALUE of this dictionary will be the INPUT for this function.
 
     This simplified case needs to be handled.
 
@@ -230,7 +229,7 @@ def build_schema(schema, key_properties=None, add_metadata=True, force_fields={}
     :param schema: input simplified JSON schema
     :param key_properties: JSON schema fields which will become required BigQuery column
     :param add_metadata: do we want BigQuery metadata columns (e.g., when data was uploaded?)
-    :param force_fields: TODO: add explanation
+    :param force_fields: TODO: add explanation. force_fields are from table_config dictionary.
     :return: a list of BigQuery SchemaFields, which represents one BigQuery table
     """
 
