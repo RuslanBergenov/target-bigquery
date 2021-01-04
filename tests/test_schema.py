@@ -53,7 +53,7 @@ class TestStream(unittestcore.BaseUnitTest):
             elif f.name == "date":
                 self.assertEqual(f.field_type.upper(), "DATE")
 
-    def test_prioritize_one_data_type_from_multiple_ones_in_anyOf(self):
+    def test_prioritize_one_data_type_from_multiple_ones_in_anyOf_string(self):
 
         test_input = {
                 'anyOf': [
@@ -65,7 +65,20 @@ class TestStream(unittestcore.BaseUnitTest):
                     },
                     {
                         'type': [
+                            'boolean',
+                            'null'
+                        ]
+                    },
+                    {
+                        'type': [
                             'string',
+                            'null'
+                        ]
+                    }
+                    ,
+                    {
+                        'type': [
+                            'number',
                             'null'
                         ]
                     }
@@ -79,6 +92,9 @@ class TestStream(unittestcore.BaseUnitTest):
         converted_data_type = convert_field_type(test_input)
 
         assert converted_data_type == "STRING"
+
+    def test_prioritize_one_data_type_from_multiple_ones_in_anyOf_float(self):
+
 
         test_input = {
             'anyOf': [
@@ -94,6 +110,13 @@ class TestStream(unittestcore.BaseUnitTest):
                         'null'
                     ]
                 }
+                ,
+                {
+                    'type': [
+                        'boolean',
+                        'null'
+                    ]
+                }
             ]
         }
 
@@ -104,6 +127,8 @@ class TestStream(unittestcore.BaseUnitTest):
         converted_data_type = convert_field_type(test_input)
 
         assert converted_data_type == "FLOAT"
+
+    def test_prioritize_one_data_type_from_multiple_ones_in_anyOf_integer(self):
 
         test_input = {
             'anyOf': [
@@ -131,6 +156,10 @@ class TestStream(unittestcore.BaseUnitTest):
         converted_data_type = convert_field_type(test_input)
 
         assert converted_data_type == "INTEGER"
+
+
+
+
 
 
     def test_nested_schema_1(self):
