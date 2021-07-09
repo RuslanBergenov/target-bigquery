@@ -1,4 +1,5 @@
 from tests import unittestcore
+import unittest
 
 """
 Tests:
@@ -8,8 +9,10 @@ Load append tables with partition field of int or string (should fail)
 
 """
 
-class TestJobLoad(unittestcore.BaseUnitTest):
 
+
+class TestJobLoad(unittestcore.BaseUnitTest):
+    @unittest.skip("Skipped")
     def test_simple_stream(self):
         from target_bigquery import main
 
@@ -25,6 +28,7 @@ class TestJobLoad(unittestcore.BaseUnitTest):
         self.delete_dataset()
         print(self.get_state())
 
+    @unittest.skip("Skipped")
     def test_simple_stream_with_tables_config(self):
         from target_bigquery import main
 
@@ -41,6 +45,7 @@ class TestJobLoad(unittestcore.BaseUnitTest):
         self.delete_dataset()
         print(self.get_state())
 
+    @unittest.skip("Skipped")
     def test_complex_stream(self):
         from target_bigquery import main
 
