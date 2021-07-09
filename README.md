@@ -1,6 +1,6 @@
 # target-bigquery
 
-[![Status of dev-ci-cd-poc](https://github.com/RuslanBergenov/target-bigquery/workflows/python-app.yml/badge.svg?branch=dev-ci-cd-poc)]
+[![Status of dev-ci-cd-poc](https://github.com/RuslanBergenov/target-bigquery/actions/workflows/python-app.yml/badge.svg?branch=dev-ci-cd-poc)]
 
 A [Singer](https://singer.io) target that writes data to Google BigQuery.
 
