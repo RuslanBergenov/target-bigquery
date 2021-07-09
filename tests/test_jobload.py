@@ -15,7 +15,7 @@ class TestJobLoad(unittestcore.BaseUnitTest):
 
         self.set_cli_args(
             stdin="./rsc/simple_stream.json",
-            config="../sandbox/target_config.json",
+            config="../sandbox/target-config.json",
             processhandler="load-job"
         )
 
@@ -30,7 +30,7 @@ class TestJobLoad(unittestcore.BaseUnitTest):
 
         self.set_cli_args(
             stdin="./rsc/simple_stream.json",
-            config="../sandbox/target_config.json",
+            config="../sandbox/target-config.json",
             tables="./rsc/simple_stream_table_config.json",
             processhandler="load-job"
         )
@@ -46,7 +46,7 @@ class TestJobLoad(unittestcore.BaseUnitTest):
 
         self.set_cli_args(
             stdin="./rsc/complex_stream.json",
-            config="../sandbox/target_config.json",
+            config="../sandbox/target-config.json",
             processhandler="load-job"
         )
 
