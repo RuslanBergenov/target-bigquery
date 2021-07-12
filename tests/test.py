@@ -12,7 +12,3 @@ if __name__ == "__main__": # this line prevents tests from running twice
     runner.run(suite)
 
 
-#TODO: CI/CD
-# how do I test with rsc resources???
-# how do I run a test which uses a sensitive file from gitignored sandbox directory???
-# how do I change the name on the status badge?

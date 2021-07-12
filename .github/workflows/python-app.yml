@@ -36,5 +36,8 @@ jobs:
         pip install pytest
         pytest --verbose
 
-
+#TODO: CI/CD: see below:
 #TODO: should my workflow be Pypi package or Python package instead of python application?
+# how do I test with rsc resources??? - DONE. Use Gord's approach to dynamic directory building (OS-agnostic)
+#TODO: how do I run a test which uses a sensitive file from gitignored sandbox directory???
+#TODO: how do I change the name on the status badge?
