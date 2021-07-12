@@ -15,6 +15,9 @@ class BaseUnitTest(unittest.TestCase):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.normpath(
             os.path.join(os.path.dirname(__file__), "..", "sandbox", "sa.json"))
 
+        os.environ["TARGET_CONFIG"] = os.path.join(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'sandbox'),
+                     'target-config.json')
+
         self.client = None
         self.project_id = None
         self.dataset_id = None

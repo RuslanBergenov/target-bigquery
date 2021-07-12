@@ -3,6 +3,10 @@
 
 name: Python application
 
+env:
+  TARGET_CONFIG: ${{ secrets.TARGET_CONFIG }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
 on:
   push:
     branches: [ dev-ci-cd-poc ]
