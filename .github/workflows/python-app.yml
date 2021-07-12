@@ -39,6 +39,7 @@ jobs:
       run: |
         mkdir sandbox
         echo "$TARGET_CONFIG" > "sandbox/target-config.json"
+        echo "$GOOGLE_APPLICATION_CREDENTIALS" > "sandbox/sa.json"
         pip install pytest
         pytest --verbose
 
