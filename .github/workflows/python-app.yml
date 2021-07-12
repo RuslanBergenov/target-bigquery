@@ -37,13 +37,14 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        mkdir sandbox
+#        mkdir sandbox
+        echo "$GOOGLE_APPLICATION_CREDENTIALS" > "sandbox/sa.json"
         echo "$TARGET_CONFIG" > "sandbox/target-config.json"
         pip install pytest
         pytest --verbose
 
 #TODO: CI/CD: see below:
-#TODO: should my workflow be Pypi package or Python package instead of python application?
 # how do I test with rsc resources??? - DONE. Use Gord's approach to dynamic directory building (OS-agnostic)
-#TODO: how do I run a test which uses a sensitive file from gitignored sandbox directory???
+#how do I run a test which uses a sensitive file from gitignored sandbox directory??? - DONE. Use Github secrets and workflow env var
+#TODO: should my workflow be Pypi package or Python package instead of python application?
 #TODO: how do I change the name on the status badge?
