@@ -34,4 +34,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        pytest --verbose
+
+
+#TODO: should my workflow be Pypi package or Python package instead of python application?

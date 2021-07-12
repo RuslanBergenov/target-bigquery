@@ -11,6 +11,7 @@ from tests.rsc.input_json_schemas import *
 
 from tests.utils import convert_list_of_schema_fields_to_list_of_lists, compare_old_vs_new_schema_conversion
 
+import os
 
 class TestStream(unittestcore.BaseUnitTest):
 
@@ -251,7 +252,11 @@ class TestStream(unittestcore.BaseUnitTest):
 
     def test_several_nested_schemas_amazon(self):
 
-        compare_old_vs_new_schema_conversion("rsc/input_json_schemas_amazon.json")
+        filepath = os.path.join(os.path.join(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'tests'), 'rsc'), 'input_json_schemas_amazon.json')
+
+        compare_old_vs_new_schema_conversion(filepath)
+
+
 
 
 

@@ -110,6 +110,6 @@ ENV/
 sandbox/
 
 # dev files
-tests/dev_tests
+tests/archived_and_temp_backups/dev_tests
 
 archived_and_temp_backups
