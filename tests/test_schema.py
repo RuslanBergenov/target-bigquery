@@ -9,7 +9,7 @@ from tests import unittestcore
 
 from tests.rsc.input_json_schemas import *
 
-from tests.utils import convert_list_of_schema_fielts_to_list_of_lists
+from tests.utils import convert_list_of_schema_fields_to_list_of_lists, compare_old_vs_new_schema_conversion
 
 
 class TestStream(unittestcore.BaseUnitTest):
@@ -196,9 +196,9 @@ class TestStream(unittestcore.BaseUnitTest):
         schema_3_built_old_method = build_schema_old(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
         # are results of the two methods above identical? ignore order of columns and case
-        schema_built_new_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_2_built_new_method)
+        schema_built_new_method_sorted = convert_list_of_schema_fields_to_list_of_lists(schema_2_built_new_method)
 
-        schema_built_old_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_3_built_old_method)
+        schema_built_old_method_sorted = convert_list_of_schema_fields_to_list_of_lists(schema_3_built_old_method)
 
         assert schema_built_new_method_sorted == schema_built_old_method_sorted
 
@@ -239,9 +239,9 @@ class TestStream(unittestcore.BaseUnitTest):
             schema_3_built_old_method = build_schema_old(msg.schema, key_properties=msg.key_properties, add_metadata=True)
 
             # are results of the two methods above identical? ignore order of columns and case
-            schema_built_new_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_2_built_new_method)
+            schema_built_new_method_sorted = convert_list_of_schema_fields_to_list_of_lists(schema_2_built_new_method)
 
-            schema_built_old_method_sorted = convert_list_of_schema_fielts_to_list_of_lists(schema_3_built_old_method)
+            schema_built_old_method_sorted = convert_list_of_schema_fields_to_list_of_lists(schema_3_built_old_method)
 
             assert schema_built_new_method_sorted == schema_built_old_method_sorted
 
@@ -249,7 +249,9 @@ class TestStream(unittestcore.BaseUnitTest):
 
 
 
+    def test_several_nested_schemas_amazon(self):
 
+        compare_old_vs_new_schema_conversion("rsc/input_json_schemas_amazon.json")
 
 
 
