@@ -1,5 +1,4 @@
 from tests import unittestcore
-
 import os
 
 class TestJobLoad(unittestcore.BaseUnitTest):
