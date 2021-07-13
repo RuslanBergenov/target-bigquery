@@ -53,7 +53,7 @@ class TestJobLoad(unittestcore.BaseUnitTest):
         )
 
         ret = main()
-        self.assertEqual(ret, 0, msg="Exit code is not 0!")
+        self.assertEqual(ret, 1, msg="Exit code is not 1!")
 
         self.delete_dataset()
         print(self.get_state())
