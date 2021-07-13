@@ -46,7 +46,3 @@ jobs:
         echo "$TARGET_CONFIG" > "sandbox/target-config.json"
         pip install pytest
         pytest --verbose
-
-#TODO: ci/cd:
-# error while running unit tests
-# package badge
