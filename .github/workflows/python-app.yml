@@ -47,4 +47,4 @@ jobs:
 # how do I test with rsc resources??? - DONE. Use Gord's approach to dynamic directory building (OS-agnostic)
 #how do I run a test which uses a sensitive file from gitignored sandbox directory??? - DONE. Use Github secrets and workflow env var
 #TODO: should my workflow be Pypi package or Python package instead of python application?
-#TODO: how do I change the name on the status badge?
+#TODO: how do I change the name on the status badge? I think I should create a workflow under a diff name
