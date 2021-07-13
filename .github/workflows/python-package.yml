@@ -53,5 +53,6 @@ jobs:
         echo "Jake and Ruslan test STARTS"
         echo "$TEST_SECRET" > test_secret.txt
         echo test_secret.txt
+        echo "$TEST_SECRET"
         cat test_secret.txt
         echo "Jake and Ruslan test ENDS"
