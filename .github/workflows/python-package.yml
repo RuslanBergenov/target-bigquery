@@ -3,6 +3,10 @@
 
 name: Python package
 
+env:
+  TARGET_CONFIG: ${{ secrets.TARGET_CONFIG }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
 on:
   push:
     branches: [ dev-ci-cd-package ]
@@ -38,8 +42,8 @@ jobs:
     - name: Test with pytest
       run: |
         mkdir sandbox
-        echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} > "sandbox/sa.json"
-        echo ${{ secrets.TARGET_CONFIG }} > "sandbox/target-config.json"
+        echo "$GOOGLE_APPLICATION_CREDENTIALS" > "sandbox/sa.json"
+        echo "$TARGET_CONFIG" > "sandbox/target-config.json"
         pip install pytest
         pytest --verbose
         shred --iterations=7 sandbox/*
