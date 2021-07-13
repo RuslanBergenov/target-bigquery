@@ -1,6 +1,6 @@
 # target-bigquery
 
-[![Python package](https://github.com/RuslanBergenov/target-bigquery/actions/workflows/python-package.yml/badge.svg)](https://github.com/RuslanBergenov/target-bigquery/actions/workflows/python-package.yml)
+[![Python package](https://github.com/RuslanBergenov/target-bigquery/actions/workflows/python-package.yml/badge.svg?branch=dev-ci-cd-package)](https://github.com/RuslanBergenov/target-bigquery/actions/workflows/python-package.yml)
 
 A [Singer](https://singer.io) target that writes data to Google BigQuery.
 
