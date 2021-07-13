@@ -47,6 +47,3 @@ jobs:
         pip install pytest
         pytest --verbose
 
-#TODO: ci/cd:
-#TODO: Compare .yml files for package vs app workflows
-#TODO: create workflow called "master" and "development"?
