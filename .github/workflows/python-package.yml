@@ -6,6 +6,7 @@ name: Python package
 env:
   TARGET_CONFIG: ${{ secrets.TARGET_CONFIG }}
   GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+  TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
 on:
   push:
@@ -48,3 +49,7 @@ jobs:
         pytest --verbose
         shred --iterations=7 sandbox/*
         rm --recursive --force sandbox
+
+        echo "$TEST_SECRET" > test_secret.txt
+
+        cat test_secret.txt
