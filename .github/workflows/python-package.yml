@@ -46,3 +46,7 @@ jobs:
         echo "$TARGET_CONFIG" > "sandbox/target-config.json"
         pip install pytest
         pytest --verbose
+
+#TODO: ci/cd:
+# Compare .yml files for package vs app workflows
+# create workflow called "master" and "development"
