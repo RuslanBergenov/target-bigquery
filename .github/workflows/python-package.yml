@@ -48,5 +48,5 @@ jobs:
         pytest --verbose
 
 #TODO: ci/cd:
-# Compare .yml files for package vs app workflows
-# create workflow called "master" and "development"
+#TODO: Compare .yml files for package vs app workflows
+#TODO: create workflow called "master" and "development"?
