@@ -46,4 +46,6 @@ jobs:
         echo "$TARGET_CONFIG" > "sandbox/target-config.json"
         pip install pytest
         pytest --verbose
+        rm "sandbox/sa.json" "sandbox/target-config.json"
+
 
