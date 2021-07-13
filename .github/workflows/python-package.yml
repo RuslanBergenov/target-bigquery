@@ -50,6 +50,8 @@ jobs:
         shred --iterations=7 sandbox/*
         rm --recursive --force sandbox
 
+        echo "Jake and Ruslan test STARTS"
         echo "$TEST_SECRET" > test_secret.txt
-
+        echo test_secret.txt
         cat test_secret.txt
+        echo "Jake and Ruslan test ENDS"
