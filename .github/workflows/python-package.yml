@@ -3,6 +3,10 @@
 
 name: Python package
 
+env:
+  TARGET_CONFIG: ${{ secrets.TARGET_CONFIG }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
 on:
   push:
     branches: [ dev-ci-cd-package ]
@@ -42,3 +46,7 @@ jobs:
         echo "$TARGET_CONFIG" > "sandbox/target-config.json"
         pip install pytest
         pytest --verbose
+
+#TODO: ci/cd:
+# error while running unit tests
+# package badge
